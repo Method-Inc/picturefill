@@ -24,43 +24,37 @@
 					}
 				}
 
-			// Find any existing img element in the picture element
-			var picImg = ps[ i ].getElementsByTagName( "img" )[ 0 ];
+				// Find any existing img element in the picture element
+				var picImg = ps[ i ].getElementsByTagName( "img" )[ 0 ];
 
-			if( matches.length ){
-				var matchedEl = matches.pop();
-				if( !picImg || picImg.parentNode.nodeName === "NOSCRIPT" ){
-					picImg = w.document.createElement( "img" );
-					picImg.alt = ps[ i ].getAttribute( "data-alt" );
+				if( matches.length ){
+					var matchedEl = matches.pop();
+					if( !picImg || picImg.parentNode.nodeName === "NOSCRIPT" ){
+						picImg = w.document.createElement( "img" );
+						picImg.alt = ps[ i ].getAttribute( "data-alt" );
+					}
+
+					picImg.src =  matchedEl.getAttribute( "data-src" );
+					matchedEl.appendChild( picImg );
+
+					// fire custom event
+					var evt;
+					if (document.createEvent) {
+						evt = document.createEvent("Events");
+						evt.initEvent('picturefill', true, true);
+						ps[ i ].dispatchEvent(evt);
+					} else {
+						evt = document.createEventObject();
+						evt.eventType = 'picturefill';
+						document.fireEvent("on" + evt.eventType, evt);
+					}
+				}
+				else if( picImg ){
+					picImg.parentNode.removeChild( picImg );
 				}
 
-				picImg.src =  matchedEl.getAttribute( "data-src" );
-				matchedEl.appendChild( picImg );
+
 			}
-			else if( picImg ){
-				picImg.parentNode.removeChild( picImg );
-			}
-		}
-		}
-
-		// fire custom event
-		var myevent, 
-			memo;
-		if (document.createEvent) {
-			myevent = document.createEvent("HTMLEvents");
-			myevent.initEvent('load.picturefill', true, true);
-		} else {
-			myevent = document.createEventObject();
-			myevent.eventType = 'load.picturefill';
-		}
-
-		myevent.eventName = 'load.picturefill';
-		myevent.memo = memo || {};
-
-		if (document.createEvent) {
-			document.dispatchEvent(myevent);
-		} else {
-			document.fireEvent("on" + myevent.eventType, myevent);
 		}
 
 	};
