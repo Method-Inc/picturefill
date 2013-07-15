@@ -42,6 +42,27 @@
 			}
 		}
 		}
+
+		// fire custom event
+		var myevent, 
+			memo;
+		if (document.createEvent) {
+			myevent = document.createEvent("HTMLEvents");
+			myevent.initEvent('load.picturefill', true, true);
+		} else {
+			myevent = document.createEventObject();
+			myevent.eventType = 'load.picturefill';
+		}
+
+		myevent.eventName = 'load.picturefill';
+		myevent.memo = memo || {};
+
+		if (document.createEvent) {
+			document.dispatchEvent(myevent);
+		} else {
+			document.fireEvent("on" + myevent.eventType, myevent);
+		}
+
 	};
 
 	// Run on resize and domready (w.load as a fallback)
