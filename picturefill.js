@@ -37,17 +37,6 @@
 					picImg.src =  matchedEl.getAttribute( "data-src" );
 					matchedEl.appendChild( picImg );
 
-					// fire custom event
-					var evt;
-					if (document.createEvent) {
-						evt = document.createEvent("Events");
-						evt.initEvent('picturefill', true, true);
-						ps[ i ].dispatchEvent(evt);
-					} else {
-						evt = document.createEventObject();
-						evt.eventType = 'picturefill';
-						document.fireEvent("on" + evt.eventType, evt);
-					}
 				}
 				else if( picImg ){
 					picImg.parentNode.removeChild( picImg );
@@ -55,6 +44,18 @@
 
 
 			}
+		}
+
+		// fire custom event
+		var evt;
+		if (document.createEvent) {
+			evt = document.createEvent("Events");
+			evt.initEvent('picturefill', true, true);
+			document.dispatchEvent(evt);
+		} else {
+			evt = document.createEventObject();
+			evt.eventType = 'picturefill';
+			document.fireEvent("on" + evt.eventType, evt);
 		}
 
 	};
